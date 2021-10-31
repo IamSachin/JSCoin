@@ -1,11 +1,16 @@
 {
-  "name": "blockchain",
+  "name": "jscoin",
   "version": "1.0.0",
   "description": "A blockchain in JS",
   "main": "index.js",
   "author": "Sachin Rajput",
   "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon --experimental-specifier-resolution=node index.js"
+  },
   "dependencies": {
-    "crypto-js": "^4.1.1"
+    "crypto-js": "^4.1.1",
+    "nodemon": "^2.0.14"
   }
 }

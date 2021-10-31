@@ -14,7 +14,7 @@ export class Blockchain {
    * @returns {Block}
    */
   getLatestBlock() {
-    this.chain.slice(-1);
+    return this.chain.slice(-1);
   }
 
   /**
