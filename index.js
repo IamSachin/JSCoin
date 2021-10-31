@@ -22,4 +22,4 @@ const secondBlock = new Block({
 JSCoin.addBlock(firstBlock);
 JSCoin.addBlock(secondBlock);
 
-console.log(JSON.stringify(JSCoin, null ,4));
+console.log(JSON.stringify(JSCoin, null, 2));

@@ -14,12 +14,11 @@ export class Blockchain {
    * @returns {Block}
    */
   getLatestBlock() {
-    return this.chain.slice(-1);
+    return this.chain.slice(-1)[0];
   }
 
   /**
    * @param {Block} block
-   * @returns {Block}
    */
   addBlock(block) {
     this.chain.push(this.#processNewBlock(block));

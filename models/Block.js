@@ -18,22 +18,22 @@ export class Block {
   data;
 
   /**
-   * @var {string}
-   */
-  hash;
-
-  /**
    * Hash of the block before the current block
    * @var {string}
    */
   previousHash;
 
+  /**
+   * @var {string}
+   */
+  hash;
+
   constructor(model = {}) {
     this.index = model.index;
     this.timestamp = model.timestamp;
     this.data = model.data;
-    this.hash = model.hash ?? '';
     this.previousHash = model.previousHash;
+    this.hash = this.calculateHash();
   }
 
   calculateHash() {
