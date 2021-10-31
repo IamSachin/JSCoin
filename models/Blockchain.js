@@ -14,7 +14,8 @@ export class Blockchain {
    * @returns {Block}
    */
   getLatestBlock() {
-    return this.chain.slice(-1)[0];
+    const [latestBlock] = this.chain.slice(-1);
+    return latestBlock;
   }
 
   /**
@@ -44,5 +45,25 @@ export class Blockchain {
       data: 'Genesis Block',
       previousHash: '0'
     });
+  }
+
+  /**
+   * @returns {boolean}
+   */
+  isChainValid() {
+    for (let i = 1; i < this.chain.length; i++) {
+      const currentBlock = this.chain[i];
+      const previousBlock = this.chain[i - 1];
+
+      if (currentBlock.hash !== currentBlock.calculateHash()) {
+        return false;
+      }
+
+      if (currentBlock.previousHash !== previousBlock.hash) {
+        return false;
+      }
+
+      return true;
+    }
   }
 }
