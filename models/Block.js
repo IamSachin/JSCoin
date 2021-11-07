@@ -2,20 +2,14 @@ import SHA256 from 'crypto-js/sha256';
 
 export class Block {
   /**
-   * The position of the block on the chain
-   * @var {int}
-   */
-  index;
-
-  /**
-   * @var {int}
+   * @var {number}
    */
   timestamp;
 
   /**
-   * @var {object}
+   * @var {Transaction[]}
    */
-  data;
+  transactions;
 
   /**
    * Hash of the block before the current block
@@ -30,14 +24,13 @@ export class Block {
 
   /**
    * Nonce is a number that is added to the hash to make it unique
-   * @var {int}
+   * @var {number}
    */
   nonce;
 
   constructor(model = {}) {
-    this.index = model.index;
     this.timestamp = model.timestamp;
-    this.data = model.data;
+    this.transactions = model.transactions;
     this.previousHash = model.previousHash;
     this.hash = this.calculateHash();
     this.nonce = 0;
@@ -45,15 +38,14 @@ export class Block {
 
   calculateHash() {
     return SHA256(
-      `${this.index} \
-      + ${this.timestamp} \
+      `${this.timestamp} \
       + ${this.previousHash} \
-      + ${JSON.stringify(this.data)}
+      + ${JSON.stringify(this.transactions)}
       + ${this.nonce}`
     ).toString();
   }
 
-  mineBlack(difficulty = 0) {
+  mineBlock(difficulty = 0) {
     // A difficult hash can be one that has a certain number of zeroes at the beginning
     // We keep recalculating the hash till me meet the condition
     while (this.hash.substring(0, difficulty) !== Array(difficulty + 1).join('0')) {

@@ -1,5 +1,6 @@
 import { ChainConsant } from '../constants/chain.constants';
 import { Block } from './Block';
+import { Transaction } from './Transaction';
 
 export class Blockchain {
   /**
@@ -7,33 +8,80 @@ export class Blockchain {
    */
   chain;
 
-  constructor(model = {}) {
+  /**
+   * @var {array}
+   */
+  pendingTransactions;
+
+  constructor() {
     this.chain = [this.#createGenesisBlock()];
+    this.pendingTransactions = [];
   }
 
   /**
-   * @returns {Block}
+   * @param {Transaction} transaction
    */
-  getLatestBlock() {
-    const [latestBlock] = this.chain.slice(-1);
-    return latestBlock;
+  createTransaction(transaction) {
+    this.pendingTransactions.push(transaction);
+  }
+
+  /**
+   * @param {string} address
+   * @returns {number}
+   */
+  getBalanceOfAddress(address) {
+    let balance = 0;
+
+    for (let block of this.chain) {
+      for (let transaction of block.transactions) {
+        if (transaction.fromAddress === address) {
+          balance -= transaction.amount;
+        }
+
+        if (transaction.toAddress === address) {
+          balance += transaction.amount;
+        }
+      }
+    }
+
+    return balance;
+  }
+
+  /**
+   * @param {string} miningRewardAddress
+   */
+  minePendingTransactions(miningRewardAddress) {
+    let block = new Block({
+      timestamp: Date.now(),
+      transactions: this.pendingTransactions
+    });
+
+    console.time('Mined in: ');
+    block.mineBlock(ChainConsant.DIFFICULTY);
+    console.timeEnd('Mined in: ');
+
+    this.#addBlock(block);
+    this.#resetPendingTransactions(miningRewardAddress);
   }
 
   /**
    * @param {Block} block
    */
-  addBlock(block) {
-    this.chain.push(this.#processNewBlock(block));
+  #addBlock(block) {
+    this.chain.push(block);
   }
 
   /**
-   * @param {Block} block
-   * @returns {Block}
+   * @param {string} miningRewardAddress
    */
-  #processNewBlock(block) {
-    block.previousHash = this.getLatestBlock().hash;
-    block.mineBlack(ChainConsant.DIFFICULTY);
-    return block;
+  #resetPendingTransactions(miningRewardAddress) {
+    this.pendingTransactions = [
+      new Transaction({
+        fromAddress: null,
+        toAddress: miningRewardAddress,
+        amount: ChainConsant.MINING_REWARD
+      })
+    ];
   }
 
   /**
@@ -41,9 +89,8 @@ export class Blockchain {
    */
   #createGenesisBlock() {
     return new Block({
-      index: 0,
       timestamp: +new Date(),
-      data: 'Genesis Block',
+      transactions: [],
       previousHash: '0'
     });
   }

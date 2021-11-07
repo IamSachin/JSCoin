@@ -1,46 +1,32 @@
 import { Block } from './models/Block';
 import { Blockchain } from './models/BlockChain';
+import { Transaction } from './models/Transaction';
 
 const JSCoin = new Blockchain();
+JSCoin.createTransaction(
+  new Transaction({
+    fromAdddress: 'address1',
+    toAddress: 'address2',
+    amount: 100
+  })
+);
 
-const firstBlock = new Block({
-  index: 1,
-  timestamp: +new Date(),
-  data: {
-    amount: 30
-  }
-});
-
-const secondBlock = new Block({
-  index: 2,
-  timestamp: +new Date(),
-  data: {
+JSCoin.createTransaction(
+  new Transaction({
+    fromAdddress: 'address2',
+    toAddress: 'address1',
     amount: 50
-  }
-});
+  })
+);
 
-const thirdBlock = new Block({
-  index: 3,
-  timestamp: +new Date(),
-  data: {
-    amount: 23
-  }
-});
+console.log('Starting mining...');
+JSCoin.minePendingTransactions('minerAddress');
 
-console.log('Mining Block:');
-console.time('Mining time:');
-JSCoin.addBlock(firstBlock);
-console.timeEnd('Mining time:');
-console.log('===========================');
+console.log('Balance of miner: ', JSCoin.getBalanceOfAddress('minerAddress'));
 
-console.log('Mining Block:');
-console.time('Mining time:');
-JSCoin.addBlock(secondBlock);
-console.timeEnd('Mining time:');
-console.log('===========================');
+// Now miner's reward is in pending transactions. So let's mine again
 
-console.log('Mining Block:');
-console.time('Mining time:');
-JSCoin.addBlock(thirdBlock);
-console.timeEnd('Mining time:');
-console.log('===========================');
+console.log('\nStarting mining...');
+JSCoin.minePendingTransactions('minerAddress');
+
+console.log('Balance of miner: ', JSCoin.getBalanceOfAddress('minerAddress'));

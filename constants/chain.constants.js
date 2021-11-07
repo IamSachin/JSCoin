@@ -1,3 +1,4 @@
 export const ChainConsant = {
-  DIFFICULTY: 5
+  DIFFICULTY: 4,
+  MINING_REWARD: 100
 };
