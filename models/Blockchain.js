@@ -1,3 +1,4 @@
+import { ChainConsant } from '../constants/chain.constants';
 import { Block } from './Block';
 
 export class Blockchain {
@@ -31,7 +32,7 @@ export class Blockchain {
    */
   #processNewBlock(block) {
     block.previousHash = this.getLatestBlock().hash;
-    block.hash = block.calculateHash();
+    block.mineBlack(ChainConsant.DIFFICULTY);
     return block;
   }
 

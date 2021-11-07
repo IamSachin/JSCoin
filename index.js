@@ -19,14 +19,28 @@ const secondBlock = new Block({
   }
 });
 
+const thirdBlock = new Block({
+  index: 3,
+  timestamp: +new Date(),
+  data: {
+    amount: 23
+  }
+});
+
+console.log('Mining Block:');
+console.time('Mining time:');
 JSCoin.addBlock(firstBlock);
+console.timeEnd('Mining time:');
+console.log('===========================');
+
+console.log('Mining Block:');
+console.time('Mining time:');
 JSCoin.addBlock(secondBlock);
+console.timeEnd('Mining time:');
+console.log('===========================');
 
-console.log(JSON.stringify(JSCoin, null, 2));
-
-console.log('Is chain valid: ', JSCoin.isChainValid());
-
-JSCoin.chain[1].data.amount = 100;
-JSCoin.chain[1].hash = JSCoin.chain[1].calculateHash();
-
-console.log('Is chain valid: ', JSCoin.isChainValid());
+console.log('Mining Block:');
+console.time('Mining time:');
+JSCoin.addBlock(thirdBlock);
+console.timeEnd('Mining time:');
+console.log('===========================');
